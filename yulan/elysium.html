@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap');
+        
+        :root {
+            /* 主题1: 原配色 紫红 */
+            --theme1-primary: #d4a5c9;
+            --theme1-secondary: #6b4559;
+            --theme1-background: #1a0f1a;
+            --theme1-text: #e6d5d5;
+            --theme1-accent: #c4889f;
+            --theme1-card: #483248;
+
+            /* 主题2: 暗金 */
+            --theme2-primary: #d4b48c;
+            --theme2-secondary: #8c6d46;
+            --theme2-background: #1a140f;
+            --theme2-text: #e6dcd5;
+            --theme2-accent: #c4a488;
+            --theme2-card: #483a32;
+
+            /* 主题3: 深蓝 */
+            --theme3-primary: #a5b7d4;
+            --theme3-secondary: #455b6b;
+            --theme3-background: #0f151a;
+            --theme3-text: #d5dce6;
+            --theme3-accent: #88a2c4;
+            --theme3-card: #324548;
+
+            /* 主题4: 祖母绿 */
+            --theme4-primary: #a5d4b4;
+            --theme4-secondary: #456b54;
+            --theme4-background: #0f1a14;
+            --theme4-text: #d5e6dc;
+            --theme4-accent: #88c49a;
+            --theme4-card: #324839;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--theme1-background);
+            color: var(--theme1-text);
+            font-family: 'Ma Shan Zheng', cursive;
+            overflow-x: hidden;
+            transition: all 0.5s ease;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+        }
+
+        /* 主题切换按钮组 */
+        .theme-switcher {
+            position: fixed;
+            right: 20px;
+            top: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .theme-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .theme-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .theme-btn.theme1 {
+            background: linear-gradient(45deg, #d4a5c9, #6b4559);
+        }
+
+        .theme-btn.theme2 {
+            background: linear-gradient(45deg, #d4b48c, #8c6d46);
+        }
+
+        .theme-btn.theme3 {
+            background: linear-gradient(45deg, #a5b7d4, #455b6b);
+        }
+
+        .theme-btn.theme4 {
+            background: linear-gradient(45deg, #a5d4b4, #456b54);
+        }
+
+        .glitch-wrapper {
+            position: relative;
+            margin: 4rem 0;
+            animation: poisonPulse 6s infinite;
+        }
+
+        .main-title {
+            font-size: 5rem;
+            text-align: center;
+            color: var(--theme1-primary);
+            text-shadow: 
+                3px 3px var(--theme1-secondary),
+                -2px -2px var(--theme1-accent);
+            animation: poisonText 8s infinite;
+            letter-spacing: 4px;
+        }
+
+        .tag-line {
+            background: linear-gradient(45deg, var(--theme1-card), var(--theme1-background));
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.4rem;
+            border: 1px solid var(--theme1-secondary);
+            color: var(--theme1-accent);
+            animation: borderBreath 4s infinite;
+        }
+
+        .section {
+            margin: 3rem 0;
+            padding: 2rem;
+            background: rgba(74, 54, 74, 0.3);
+            border-radius: 15px;
+            backdrop-filter: blur(5px);
+            transition: all 0.5s;
+            border: 1px solid var(--theme1-secondary);
+            animation: sectionFloat 8s infinite;
+        }
+
+        .section:hover {
+            transform: scale(1.02);
+            background: rgba(74, 54, 74, 0.4);
+        }
+
+        .section-title {
+            font-size: 2.8rem;
+            color: var(--theme1-primary);
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px var(--theme1-background);
+        }
+
+        p {
+            font-size: 1.6rem;
+            line-height: 1.8;
+            color: var(--theme1-accent);
+            text-shadow: 1px 1px var(--theme1-background);
+        }
+
+        .card-container {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .card {
+            flex: 1;
+            padding: 2rem;
+            background: linear-gradient(135deg, var(--theme1-card), var(--theme1-background));
+            border-radius: 10px;
+            text-align: center;
+            transition: all 0.5s;
+            border: 1px solid var(--theme1-secondary);
+            animation: cardPulse 6s infinite;
+            font-size: 1.8rem;
+            color: var(--theme1-primary);
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: var(--theme1-primary);
+        }
+
+        .background-effect {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 20%, var(--theme1-secondary, rgba(107,69,89,0.1)) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, var(--theme1-card, rgba(74,54,74,0.1)) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+            animation: backgroundDrift 15s infinite;
+            opacity: 0.3;
+        }
+
+        .poison-decoration {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: repeating-linear-gradient(
+                45deg,
+                var(--theme1-secondary, rgba(107,69,89,0.05)) 0%,
+                var(--theme1-card, rgba(74,54,74,0.05)) 10%,
+                var(--theme1-background, rgba(45,31,45,0.05)) 20%
+            );
+            pointer-events: none;
+            z-index: -1;
+            animation: poisonPattern 20s infinite;
+            opacity: 0.2;
+        }
+
+        @keyframes poisonPattern {
+            0% { transform: translateX(0) translateY(0); }
+            50% { transform: translateX(10px) translateY(10px); }
+            100% { transform: translateX(0) translateY(0); }
+        }
+
+        @keyframes backgroundDrift {
+            0% { transform: scale(1); opacity: 0.2; }
+            50% { transform: scale(1.1); opacity: 0.3; }
+            100% { transform: scale(1); opacity: 0.2; }
+        }
+
+        @keyframes poisonText {
+            0% { transform: scale(1); filter: hue-rotate(0deg); }
+            50% { transform: scale(1.02); filter: hue-rotate(10deg); }
+            100% { transform: scale(1); filter: hue-rotate(0deg); }
+        }
+
+        @keyframes borderBreath {
+            0% { box-shadow: 0 0 10px var(--theme1-secondary); }
+            50% { box-shadow: 0 0 20px var(--theme1-accent); }
+            100% { box-shadow: 0 0 10px var(--theme1-secondary); }
+        }
+
+        @keyframes sectionFloat {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+            100% { transform: translateY(0); }
+        }
+
+        @keyframes cardPulse {
+            0% { box-shadow: 0 0 10px var(--theme1-secondary); }
+            50% { box-shadow: 0 0 15px var(--theme1-accent); }
+            100% { box-shadow: 0 0 10px var(--theme1-secondary); }
+        }
+    </style>
+</head>
+<body>
+    <div class="theme-switcher">
+        <div class="theme-btn theme1" onclick="changeTheme(1)"></div>
+        <div class="theme-btn theme2" onclick="changeTheme(2)"></div>
+        <div class="theme-btn theme3" onclick="changeTheme(3)"></div>
+        <div class="theme-btn theme4" onclick="changeTheme(4)"></div>
+    </div>
+
+    <div class="background-effect"></div>
+    <div class="poison-decoration"></div>
+    <div class="container">
+        <div class="glitch-wrapper">
+            <h1 class="main-title">爱丽舍乐园</h1>
+        </div>
+        
+        <div class="tag-line">
+            星穹铁道乙女向剧组 | 半架空设定 | 含跑团克苏鲁箱庭探索等元素
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">世界类型</h2>
+            <p>现代都市</p>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">身份选择</h2>
+            <div class="card-container">
+                <div class="card">
+                    <h3>攻略者</h3>
+                </div>
+                <div class="card">
+                    <h3>角色号</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">恋爱模式</h2>
+            <p>开放约会系统，剧组不平行不上墙，公屏全部友情线</p>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">审核制度</h2>
+            <p>2p通过，中微审核，需要额外填写人设和问卷，角色号150+自戏或3个QA，攻略者人设除背景注重逻辑和故事偏中严外均中微，不禁三视限制描写方式。</p>
+        </div>
+    </div>
+
+    <script>
+        function updateBackgroundEffects(themeNum) {
+            const backgroundEffect = document.querySelector('.background-effect');
+            const poisonDecoration = document.querySelector('.poison-decoration');
+            
+            backgroundEffect.style.background = `
+                radial-gradient(circle at 20% 20%, var(--theme${themeNum}-secondary) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, var(--theme${themeNum}-card) 0%, transparent 50%)
+            `;
+            
+            poisonDecoration.style.background = `repeating-linear-gradient(
+                45deg,
+                var(--theme${themeNum}-secondary) 0%,
+                var(--theme${themeNum}-card) 10%,
+                var(--theme${themeNum}-background) 20%
+            )`;
+        }
+
+        function changeTheme(themeNum) {
+            const body = document.body;
+            body.style.setProperty('--theme1-primary', getComputedStyle(document.documentElement).getPropertyValue(`--theme${themeNum}-primary`));
+            body.style.setProperty('--theme1-secondary', getComputedStyle(document.documentElement).getPropertyValue(`--theme${themeNum}-secondary`));
+            body.style.setProperty('--theme1-background', getComputedStyle(document.documentElement).getPropertyValue(`--theme${themeNum}-background`));
+            body.style.setProperty('--theme1-text', getComputedStyle(document.documentElement).getPropertyValue(`--theme${themeNum}-text`));
+            body.style.setProperty('--theme1-accent', getComputedStyle(document.documentElement).getPropertyValue(`--theme${themeNum}-accent`));
+            body.style.setProperty('--theme1-card', getComputedStyle(document.documentElement).getPropertyValue(`--theme${themeNum}-card`));
+            
+            // 更新背景色
+            body.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue(`--theme${themeNum}-background`);
+            
+            // 添加主题切换动画
+            body.style.transition = 'background-color 0.5s ease, color 0.5s ease';
+            
+            // 更新所有相关元素的颜色
+            document.querySelectorAll('.section, .card, .tag-line').forEach(el => {
+                el.style.transition = 'all 0.5s ease';
+            });
+            
+            // 更新背景特效
+            updateBackgroundEffects(themeNum);
+        }
+    </script>
+</body>
+</html>

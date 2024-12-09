@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bizarre Portfolio</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        /* ===== 配置变量 - 修改这些来自定义网站 ===== */
+        :root {
+            /* 主题颜色 */
+            --primary-red: #ff0000;
+            --secondary-red: #990000;
+            --dark-red: #660000;
+            --blood-red: #cc0000;
+            
+            /* 文本颜色 */
+            --text-white: #ffffff;
+            --text-gray: #cccccc;
+            
+            /* 背景颜色 */
+            --bg-black: #000000;
+            --bg-dark: #0a0a0a;
+            --bg-card: #1a1a1a;
+            
+            /* 特效参数 */
+            --glitch-intensity: 5px;
+            --flicker-speed: 2s;
+            --distortion-amount: 10px;
+        }
+
+        /* ===== 基础样式 ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-black);
+            color: var(--text-white);
+            font-family: 'Courier New', monospace;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.1),
+                rgba(0, 0, 0, 0.1) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+            z-index: 1000;
+            animation: scanline 10s linear infinite;
+            opacity: 0.3;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
+
+        /* ===== 头像部分 ===== */
+        .profile-section {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            margin: 50px 0;
+            position: relative;
+        }
+
+        .profile-image {
+            width: 200px;
+            height: 200px;
+            border: 4px solid var(--primary-red);
+            border-radius: 0;
+            position: relative;
+            overflow: hidden;
+            animation: imageGlitch 3s infinite;
+        }
+
+        .profile-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                45deg,
+                transparent,
+                rgba(255, 0, 0, 0.1),
+                transparent
+            );
+            animation: glitchEffect 3s infinite;
+        }
+
+        .profile-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(50%) contrast(120%);
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-info h1 {
+            font-size: 3em;
+            color: var(--primary-red);
+            text-shadow: 2px 2px 4px rgba(255, 0, 0, 0.5);
+            margin-bottom: 20px;
+            position: relative;
+            animation: textGlitch 5s infinite;
+        }
+
+        /* ===== 企划部分 ===== */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .project-card {
+            background: var(--bg-card);
+            padding: 20px;
+            border: 1px solid var(--primary-red);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: -100%;
+            left: -100%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent,
+                rgba(255, 0, 0, 0.1),
+                transparent
+            );
+            transition: all 0.5s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3);
+        }
+
+        .project-card:hover::before {
+            top: -50%;
+            left: -50%;
+        }
+
+        /* ===== OC展示部分 ===== */
+        .oc-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            animation: modalFlicker 0.3s ease-in-out;
+            backdrop-filter: blur(5px);
+        }
+
+        .oc-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--bg-dark);
+            padding: 40px;
+            border: 2px solid var(--primary-red);
+            max-width: 90%;
+            max-height: 90%;
+            width: 800px;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 30px;
+            overflow: hidden;
+        }
+
+        .oc-image-section {
+            position: relative;
+            border: 1px solid var(--primary-red);
+            height: 400px;
+            overflow: hidden;
+        }
+
+        .oc-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(50%) contrast(120%);
+        }
+
+        .oc-image-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                135deg,
+                transparent 0%,
+                rgba(255, 0, 0, 0.1) 50%,
+                transparent 100%
+            );
+            animation: overlayGlow 3s infinite;
+        }
+
+        .oc-info-section {
+            overflow-y: auto;
+            padding-right: 20px;
+        }
+
+        .oc-info-section::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .oc-info-section::-webkit-scrollbar-track {
+            background: var(--bg-black);
+        }
+
+        .oc-info-section::-webkit-scrollbar-thumb {
+            background: var(--primary-red);
+        }
+
+        .oc-name {
+            font-size: 2.5em;
+            color: var(--primary-red);
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(255, 0, 0, 0.5);
+            position: relative;
+            display: inline-block;
+        }
+
+        .oc-subtitle {
+            font-size: 1.2em;
+            color: var(--text-gray);
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        .oc-stat {
+            margin-bottom: 20px;
+            border-left: 3px solid var(--primary-red);
+            padding-left: 15px;
+            position: relative;
+        }
+
+        .oc-stat:hover {
+            background: rgba(255, 0, 0, 0.1);
+        }
+
+        .oc-stat-label {
+            font-size: 0.9em;
+            color: var(--text-gray);
+            margin-bottom: 5px;
+        }
+
+        .oc-stat-value {
+            font-size: 1.1em;
+            color: var(--text-white);
+        }
+
+        .oc-description {
+            margin: 30px 0;
+            line-height: 1.6;
+            position: relative;
+        }
+
+        .oc-relations {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .relation-item {
+            background: var(--bg-black);
+            padding: 10px;
+            border: 1px solid var(--primary-red);
+            text-align: center;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+
+        .relation-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            color: var(--primary-red);
+            cursor: pointer;
+            font-size: 24px;
+            transition: all 0.3s ease;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--primary-red);
+        }
+
+        .close-modal:hover {
+            transform: rotate(90deg);
+            background: var(--primary-red);
+            color: var(--text-white);
+        }
+
+        @keyframes overlayGlow {
+            0%, 100% {
+                opacity: 0.3;
+            }
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        .oc-tag {
+            display: inline-block;
+            padding: 5px 10px;
+            background: var(--bg-black);
+            border: 1px solid var(--primary-red);
+            margin: 0 5px 5px 0;
+            font-size: 0.8em;
+            transition: all 0.3s ease;
+        }
+
+        .oc-tag:hover {
+            background: var(--primary-red);
+            color: var(--bg-black);
+        }
+
+        .oc-quote {
+            font-style: italic;
+            padding: 20px;
+            border-left: 3px solid var(--primary-red);
+            margin: 20px 0;
+            background: rgba(255, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .oc-quote::before {
+            content: '"';
+            position: absolute;
+            top: 0;
+            left: 10px;
+            font-size: 3em;
+            color: var(--primary-red);
+            opacity: 0.5;
+        }
+
+        /* ===== 特效动画 ===== */
+        @keyframes scanline {
+            0% {
+                transform: translateY(0);
+            }
+            100% {
+                transform: translateY(100vh);
+            }
+        }
+
+        @keyframes imageGlitch {
+            0% {
+                transform: translate(0);
+                filter: hue-rotate(0deg);
+            }
+            10% {
+                transform: translate(-5px, 5px);
+                filter: hue-rotate(90deg);
+            }
+            20% {
+                transform: translate(5px, -5px);
+                filter: hue-rotate(180deg);
+            }
+            30% {
+                transform: translate(0);
+                filter: hue-rotate(0deg);
+            }
+        }
+
+        @keyframes textGlitch {
+            0% {
+                text-shadow: 2px 2px 4px rgba(255, 0, 0, 0.5);
+            }
+            5% {
+                text-shadow: -2px -2px 4px rgba(255, 0, 0, 0.5);
+            }
+            10% {
+                text-shadow: 2px -2px 4px rgba(255, 0, 0, 0.5);
+            }
+            15% {
+                text-shadow: 2px 2px 4px rgba(255, 0, 0, 0.5);
+            }
+        }
+
+        @keyframes glitchEffect {
+            0% {
+                transform: translate(0);
+                opacity: 0;
+            }
+            5% {
+                transform: translate(var(--glitch-intensity));
+                opacity: 0.5;
+            }
+            10% {
+                transform: translate(-var(--glitch-intensity));
+                opacity: 0.5;
+            }
+            15% {
+                transform: translate(0);
+                opacity: 0;
+            }
+        }
+
+        /* ===== 配置面板样式 ===== */
+        #config-panel {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--bg-dark);
+            padding: 20px;
+            border: 1px solid var(--primary-red);
+            z-index: 1001;
+            display: none;
+        }
+
+        #config-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--primary-red);
+            color: var(--text-white);
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            z-index: 1002;
+        }
+
+        .config-input {
+            margin: 10px 0;
+            width: 100%;
+        }
+
+        .config-input input,
+        .config-input textarea {
+            width: 100%;
+            padding: 5px;
+            margin-top: 5px;
+            background: var(--bg-black);
+            color: var(--text-white);
+            border: 1px solid var(--primary-red);
+        }
+
+        /* 新增的怪诞元素 */
+        .glitch-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 999;
+            animation: glitchOverlay 10s infinite;
+            opacity: 0.1;
+            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h40v40H0V0zm20 20h20v20H20V20zM0 20h20v20H0V20z' fill='%23ff0000' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+
+        @keyframes glitchOverlay {
+            0% {
+                opacity: 0.1;
+                transform: translateX(0);
+            }
+            5% {
+                opacity: 0.2;
+                transform: translateX(5px);
+            }
+            10% {
+                opacity: 0.1;
+                transform: translateX(-5px);
+            }
+        }
+
+        .section-title {
+            font-size: 2em;
+            color: var(--primary-red);
+            margin-bottom: 30px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--primary-red);
+            animation: titleGlow 2s infinite;
+        }
+
+        @keyframes titleGlow {
+            0%, 100% {
+                box-shadow: 0 0 5px var(--primary-red);
+            }
+            50% {
+                box-shadow: 0 0 20px var(--primary-red);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 怪诞覆盖效果 -->
+    <div class="glitch-overlay"></div>
+
+    <!-- 配置面板 -->
+    <button id="config-toggle" onclick="toggleConfig()">编辑内容</button>
+    <div id="config-panel">
+        <h3>内容配置</h3>
+        <div class="config-input">
+            <label>名称：</label>
+            <input type="text" id="name-input" placeholder="输入你的名字">
+        </div>
+        <div class="config-input">
+            <label>简介：</label>
+            <textarea id="bio-input" placeholder="输入个人简介"></textarea>
+        </div>
+        <div class="config-input">
+            <label>企划列表（用逗号分隔）：</label>
+            <textarea id="projects-input" placeholder="企划1, 企划2, 企划3"></textarea>
+        </div>
+        <div class="config-input">
+            <label>OC信息（JSON格式）：</label>
+            <textarea id="oc-input" placeholder='{"oc1": {"name": "OC1", "description": "描述"}}'></textarea>
+        </div>
+        <button onclick="updateContent()">保存更改</button>
+    </div>
+
+    <div class="container">
+        <!-- 个人信息部分 -->
+        <section class="profile-section">
+            <div class="profile-image">
+                <img src="/api/placeholder/200/200" alt="个人头像">
+            </div>
+            <div class="profile-info">
+                <h1 id="name-display">Your Name</h1>
+                <p id="bio-display">个人简介...</p>
+            </div>
+        </section>
+
+        <!-- 企划部分 -->
+        <section class="projects-section">
+            <h2 class="section-title">参与企划</h2>
+            <div id="projects-grid" class="projects-grid">
+                <!-- 企划将通过JavaScript动态添加 -->
+            </div>
+        </section>
+
+        <!-- OC展示部分 -->
+        <section>
+            <h2 class="section-title">我的OC</h2>
+            <div id="oc-grid" class="projects-grid">
+                <!-- OC将通过JavaScript动态添加 -->
+            </div>
+        </section>
+    </div>
+
+    <!-- OC弹窗 -->
+    <div class="oc-modal" id="oc-modal">
+        <div class="oc-content">
+            <span class="close-modal" onclick="closeOC()">&times;</span>
+            <div id="oc-details"></div>
+        </div>
+    </div>
+
+    <script>
+        // 初始配置
+        let siteConfig = {
+            name: 'Your Name',
+            bio: '这里是个人简介...',
+            projects: ['企划1', '企划2', '企划3'],
+            ocData: {
+                oc1: {
+                    name: "星野零",
+                    title: "神秘的观察者",
+                    age: "???",
+                    personality: "神秘、沉默、敏锐",
+                    role: "观察者",
+                    quote: "「在这个世界的缝隙中，总有些不为人知的真相在流动...」",
+                    description: "一个神秘的存在，似乎能够看到常人无法察觉的真相。没有人知道他的真实年龄和来历，但他总是出现在一些超自然事件发生的地方。",
+                    tags: ["神秘", "超自然", "观察者", "独行"],
+                    relations: {
+                        "月咏": "同伴",
+                        "影丸": "宿敌",
+                        "真理子": "保护对象"
+                    }
+                },
+                oc2: {
+                    name: "月咏",
+                    title: "午夜的歌姬",
+                    age: "23",
+                    personality: "优雅、神秘、温柔",
+                    role: "歌姬",
+                    quote: "「让我用歌声为你驱散黑暗吧...」",
+                    description: "在午夜出现的神秘歌姬，她的歌声据说能够安抚迷失的灵魂。没有人知道她为什么只在午夜出现，但她的存在似乎与某个古老的诅咒有关。",
+                    tags: ["歌姬", "午夜", "诅咒", "治愈"],
+                    relations: {
+                        "星野零": "同伴",
+                        "真理子": "友人",
+                        "幽斗": "神秘关系"
+                    }
+                }
+            }
+        };
+
+        // 配置面板功能
+        function toggleConfig() {
+            const panel = document.getElementById('config-panel');
+            panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // 加载配置到面板
+        function loadConfig() {
+            document.getElementById('name-input').value = siteConfig.name;
+            document.getElementById('bio-input').value = siteConfig.bio;
+            document.getElementById('projects-input').value = siteConfig.projects.join(', ');
+            document.getElementById('oc-input').value = JSON.stringify(siteConfig.ocData, null, 2);
+        }
+
+        // 更新内容
+        function updateContent() {
+            try {
+                // 更新基本信息
+                siteConfig.name = document.getElementById('name-input').value;
+                siteConfig.bio = document.getElementById('bio-input').value;
+                
+                // 更新企划列表
+                siteConfig.projects = document.getElementById('projects-input')
+                    .value.split(',')
+                    .map(project => project.trim())
+                    .filter(project => project.length > 0);
+                
+                // 更新OC数据
+                siteConfig.ocData = JSON.parse(document.getElementById('oc-input').value);
+                
+                // 刷新显示
+                refreshDisplay();
+                
+                // 隐藏配置面板
+                document.getElementById('config-panel').style.display = 'none';
+                
+                // 添加成功动画
+                addGlitchEffect();
+            } catch (e) {
+                alert('配置更新失败！请检查JSON格式是否正确。');
+            }
+        }
+
+        // 刷新显示内容
+        function refreshDisplay() {
+            // 更新基本信息
+            document.getElementById('name-display').textContent = siteConfig.name;
+            document.getElementById('bio-display').textContent = siteConfig.bio;
+            
+            // 更新企划网格
+            const projectsGrid = document.getElementById('projects-grid');
+            projectsGrid.innerHTML = siteConfig.projects.map(project => `
+                <div class="project-card">
+                    <h3>${project}</h3>
+                </div>
+
+
+            `).join('');
+            
+            // 更新OC网格
+            const ocGrid = document.getElementById('oc-grid');
+            ocGrid.innerHTML = Object.entries(siteConfig.ocData).map(([id, oc]) => `
+                <div class="project-card" onclick="showOC('${id}')">
+                    <h3>${oc.name}</h3>
+                </div>
+            `).join('');
+        }
+
+        // OC展示功能
+        function showOC(ocId) {
+            const modal = document.getElementById('oc-modal');
+            const details = document.getElementById('oc-details');
+            const oc = siteConfig.ocData[ocId];
+            
+            details.innerHTML = `
+                <div class="oc-image-section">
+                    <img src="/api/placeholder/300/400" alt="${oc.name}" class="oc-image">
+                    <div class="oc-image-overlay"></div>
+                </div>
+                <div class="oc-info-section">
+                    <h2 class="oc-name">${oc.name}</h2>
+                    <div class="oc-subtitle">${oc.title || '未知身份'}</div>
+                    
+                    <div class="oc-stats">
+                        <div class="oc-stat">
+                            <div class="oc-stat-label">年龄</div>
+                            <div class="oc-stat-value">${oc.age || '未知'}</div>
+                        </div>
+                        <div class="oc-stat">
+                            <div class="oc-stat-label">性格</div>
+                            <div class="oc-stat-value">${oc.personality || '未知'}</div>
+                        </div>
+                        <div class="oc-stat">
+                            <div class="oc-stat-label">身份</div>
+                            <div class="oc-stat-value">${oc.role || '未知'}</div>
+                        </div>
+                    </div>
+
+                    <div class="oc-quote">
+                        ${oc.quote || '「暂无台词记录」'}
+                    </div>
+
+                    <div class="oc-description">
+                        <h3>角色简介</h3>
+                        <p>${oc.description || '暂无描述'}</p>
+                    </div>
+
+                    ${oc.tags ? `
+                        <div class="oc-tags">
+                            ${oc.tags.map(tag => `<span class="oc-tag">${tag}</span>`).join('')}
+                        </div>
+                    ` : ''}
+
+                    ${oc.relations ? `
+                        <h3>关系网络</h3>
+                        <div class="oc-relations">
+                            ${Object.entries(oc.relations).map(([name, relation]) => `
+                                <div class="relation-item">
+                                    <div>${name}</div>
+                                    <small>${relation}</small>
+                                </div>
+                            `).join('')}
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+            
+            modal.style.display = 'block';
+        }
+
+        function closeOC() {
+            document.getElementById('oc-modal').style.display = 'none';
+        }
+
+        // 添加故障效果
+        function addGlitchEffect() {
+            const elements = document.querySelectorAll('.profile-image, .profile-info h1, .project-card');
+            elements.forEach(element => {
+                element.style.animation = 'none';
+                element.offsetHeight; // 触发重绘
+                element.style.animation = null;
+            });
+        }
+
+        // 随机故障效果
+        function randomGlitch() {
+            const interval = Math.random() * 10000 + 5000; // 5-15秒随机间隔
+            setTimeout(() => {
+                addGlitchEffect();
+                randomGlitch();
+            }, interval);
+        }
+
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', () => {
+            loadConfig();
+            refreshDisplay();
+            randomGlitch();
+            
+            // 添加进场动画
+            gsap.from('.profile-section', {
+                duration: 1,
+
+                opacity: 0,
+                y: 50,
+                ease: 'power3.out'
+            });
+            
+            gsap.from('.project-card', {
+                duration: 0.8,
+                opacity: 0,
+                y: 30,
+                stagger: 0.2,
+                ease: 'power3.out'
+            });
+        });
+
+        // 关闭弹窗的额外方式
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeOC();
+            }
+        });
+
+        // 点击弹窗外区域关闭
+        window.addEventListener('click', (e) => {
+            const modal = document.getElementById('oc-modal');
+            if (e.target === modal) {
+                closeOC();
+            }
+        });
+    </script>
+</body>
+</html>

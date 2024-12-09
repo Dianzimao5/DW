@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile</title>
+
+    <!-- ===== 💕 样式配置区域 ===== -->
+    <script>
+        // 主题配色（可以自由修改颜色代码）
+        const themeColors = {
+            primary: '#FF69B4',       // 主色调（粉色）
+            secondary: '#87CEEB',     // 次要色（天蓝色）
+            accent: '#FFB6C1',        // 强调色（浅粉色）
+            background: '#FFF0F5',    // 背景色（浅粉背景）
+            text: '#4A4A4A',          // 文字颜色
+            link: '#FF1493'           // 链接颜色
+        };
+
+        // 字体配置
+        const fonts = {
+            main: "'PingFang SC', 'Microsoft YaHei', sans-serif",  // 主要字体
+            decorative: "'Comic Sans MS', cursive"                 // 装饰字体
+        };
+
+        // 装饰元素配置
+        const decorations = {
+            enabled: true,              // 是否启用装饰
+            animated: true,             // 是否启用动画
+            density: 'medium',          // 装饰密度：'low', 'medium', 'high'
+            style: 'hearts',            // 装饰风格：'hearts', 'stars', 'bubbles', 'mixed'
+        };
+
+        // 动画配置
+        const animations = {
+            enabled: true,              // 是否启用动画
+            speed: 'normal',            // 动画速度：'slow', 'normal', 'fast'
+            intensity: 'medium'         // 动画强度：'light', 'medium', 'strong'
+        };
+
+        // 布局配置
+        const layout = {
+            style: 'cards',             // 布局风格：'cards', 'minimal', 'compact'
+            width: 'wide',              // 页面宽度：'narrow', 'medium', 'wide'
+            spacing: 'comfortable'       // 间距：'compact', 'comfortable', 'spacious'
+        };
+    </script>
+
+    <!-- ===== 🌈 个人信息配置区域 ===== -->
+    <script>
+        const profile = {
+            // 基本信息
+            basic: {
+                name: "小明同学",
+                title: "产品设计师",
+                avatar: "/api/placeholder/180/180",  // 头像图片URL
+                bgImage: "",            // 可选的背景图片URL
+                location: "北京",
+                email: "example@email.com"
+            },
+
+            // 个性化标语（支持多行）
+            taglines: [
+                "热爱设计与创新 ✨",
+                "用创意点亮生活 🎨",
+                "让界面充满爱 💖"
+            ],
+
+            // 关于我（支持HTML标签）
+            about: [
+                "👋 你好！我是一名充满激情的设计师",
+                "🎯 专注于创造美好的用户体验",
+                "🌱 不断学习与成长中",
+                "🎨 热爱艺术与技术的结合"
+            ],
+
+            // 兴趣爱好（可以添加emoji）
+            interests: [
+                "🎨 UI设计",
+                "📱 用户体验",
+                "🎮 游戏设计",
+                "📸 摄影",
+                "🎵 音乐"
+            ],
+
+            // 技能树（支持自定义图标和进度条样式）
+            skills: [
+                {
+                    name: "UI设计",
+                    level: 95,
+                    icon: "🎨",
+                    color: "#FF69B4"
+                },
+                {
+                    name: "交互设计",
+                    level: 90,
+                    icon: "🖱️",
+                    color: "#87CEEB"
+                },
+                {
+                    name: "原型设计",
+                    level: 85,
+                    icon: "📱",
+                    color: "#FFB6C1"
+                }
+            ],
+
+            // 教育经历
+            education: [
+                {
+                    school: "设计艺术学院",
+                    degree: "视觉传达设计",
+                    years: "2018-2022",
+                    icon: "🎓",
+                    details: "主修UI设计与用户体验"
+                }
+            ],
+
+            // 工作经历
+            experience: [
+                {
+                    company: "科技公司",
+                    position: "UI设计师",
+                    years: "2022-至今",
+                    icon: "💼",
+                    description: "负责产品界面设计与用户体验优化"
+                }
+            ],
+
+            // 作品集展示（支持图片、链接或描述）
+            portfolio: [
+                {
+                    title: "项目一",
+                    image: "/api/placeholder/400/300",
+                    description: "移动应用UI设计",
+                    link: "#",
+                    tags: ["UI设计", "移动端"]
+                }
+            ],
+
+            // 获奖成就
+            achievements: [
+                {
+                    title: "最佳设计奖",
+                    year: "2023",
+                    icon: "🏆",
+                    description: "年度设计大赛金奖"
+                }
+            ],
+
+            // 社交媒体链接
+            social: [
+                {
+                    platform: "GitHub",
+                    url: "#",
+                    icon: "github",
+                    color: "#333"
+                },
+                {
+                    platform: "LinkedIn",
+                    url: "#",
+                    icon: "linkedin",
+                    color: "#0077B5"
+                },
+                {
+                    platform: "Instagram",
+                    url: "#",
+                    icon: "instagram",
+                    color: "#E4405F"
+                }
+            ],
+
+            // 自定义部分（可以添加任何其他你想要的内容）
+            custom: {
+                section1: {
+                    title: "我的日常",
+                    content: ["听音乐 🎵", "画画 🎨", "读书 📚"],
+                    style: "bubble"  // 可选的显示样式
+                },
+                section2: {
+                    title: "最爱的话",
+                    content: "创意源于生活，设计改变世界 ✨",
+                    style: "quote"   // 可选的显示样式
+                }
+            }
+        };
+
+        // 页面元素的显示顺序（可以自由调整）
+        const sectionOrder = [
+            'header',
+            'about',
+            'skills',
+            'experience',
+            'education',
+            'portfolio',
+            'achievements',
+            'custom',
+            'contact'
+        ];
+    </script>
+
+    <!-- ===== 🎨 装饰元素和动画 ===== -->
+    <style>
+        /* 动画关键帧定义 */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes wave {
+            0% { transform: rotate(0deg); }
+            25% { transform: rotate(10deg); }
+            75% { transform: rotate(-10deg); }
+            100% { transform: rotate(0deg); }
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* 基础样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--main-font);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* 容器样式 */
+        .container {
+            max-width: var(--container-width);
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+        }
+
+        /* 头像样式 */
+        .avatar-container {
+            position: relative;
+            width: 180px;
+            height: 180px;
+            margin: 0 auto;
+        }
+
+        .avatar {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .avatar-decoration {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+
+        /* 装饰元素样式 */
+        .decoration {
+            position: absolute;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .hearts .decoration {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .stars .decoration {
+            animation: sparkle 2s ease-in-out infinite;
+        }
+
+        .bubbles .decoration {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        /* 卡片样式 */
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 1.5rem 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        /* 技能条样式 */
+        .skill-bar {
+            height: 12px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 6px;
+            overflow: hidden;
+            margin: 8px 0;
+        }
+
+        .skill-progress {
+            height: 100%;
+            border-radius: 6px;
+            transition: width 1s ease;
+            background: var(--primary-color);
+        }
+
+        /* 标签样式 */
+        .tag {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            margin: 4px;
+            background: var(--accent-color);
+            color: white;
+        }
+
+        /* 社交媒体图标样式 */
+        .social-links {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
+            background: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .social-link:hover {
+            transform: translateY(-3px);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+
+            .avatar-container {
+                width: 150px;
+                height: 150px;
+            }
+        }
+
+        /* 打印样式 */
+        @media print {
+            .decoration {
+                display: none;
+            }
+
+            .card {
+                box-shadow: none;
+                border: 1px solid #eee;
+            }
+        }
+		
+		  /* 标题样式 */
+    h1, h2, h3 {
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+    }
+
+    h1 {
+        font-size: 2.5em;
+        text-align: center;
+        background: var(--primary-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    h2 {
+        font-size: 1.8em;
+        position: relative;
+        padding-bottom: 0.5rem;
+    }
+
+    h2::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 50px;
+        height: 3px;
+        background: var(--primary-gradient);
+        border-radius: 2px;
+    }
+
+    /* 作品集展示样式 */
+    .portfolio-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    .portfolio-item {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        transition: transform 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .portfolio-item:hover {
+        transform: translateY(-5px);
+    }
+
+    .portfolio-image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .portfolio-info {
+        padding: 15px;
+    }
+
+    .portfolio-title {
+        font-size: 1.2em;
+        color: var(--primary-color);
+        margin-bottom: 8px;
+    }
+
+    .portfolio-desc {
+        font-size: 0.9em;
+        color: var(--text-color);
+        margin-bottom: 12px;
+    }
+
+    /* 自定义部分样式 */
+    .bubble-style {
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 20px;
+        padding: 15px;
+        margin: 10px 0;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        position: relative;
+    }
+
+    .bubble-style::before {
+        content: '';
+        position: absolute;
+        left: 20px;
+        bottom: -10px;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-top: 10px solid white;
+    }
+
+    .quote-style {
+        font-style: italic;
+        padding: 20px;
+        position: relative;
+    }
+
+    .quote-style::before,
+    .quote-style::after {
+        content: '"';
+        font-size: 3em;
+        color: var(--primary-color);
+        opacity: 0.2;
+        position: absolute;
+    }
+
+    .quote-style::before {
+        left: 0;
+        top: 0;
+    }
+
+    .quote-style::after {
+        right: 0;
+        bottom: -20px;
+    }
+
+    /* 加载动画 */
+    .loading {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.9);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
+    .loading::after {
+        content: '';
+        width: 40px;
+        height: 40px;
+        border: 4px solid var(--primary-color);
+        border-top: 4px solid transparent;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    /* 暗色模式支持 */
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --bg-color: #1a1a1a;
+            --text-color: #ffffff;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .tag {
+            background: rgba(255, 255, 255, 0.2);
+        }
+    }
+    </style>
+
+    <!-- ===== 🚀 页面渲染脚本 ===== -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 设置CSS变量
+            document.documentElement.style.setProperty('--primary-color', themeColors.primary);
+            document.documentElement.style.setProperty('--secondary-color', themeColors.secondary);
+            document.documentElement.style.setProperty('--accent-color', themeColors.accent);
+            document.documentElement.style.setProperty('--bg-color', themeColors.background);
+            document.documentElement.style.setProperty('--text-color', themeColors.text);
+            document.documentElement.style.setProperty('--link-color', themeColors.link);
+            document.documentElement.style.setProperty('--main-font', fonts.main);
+            document.documentElement.style.setProperty('--decorative-font', fonts.decorative);
+
+            // 根据布局配置设置容器宽度
+            const widthMap = {
+                narrow: '800px',
+                medium: '1000px',
+                wide: '1200px'
+            };
+            document.documentElement.style.setProperty('--container-width', widthMap[layout.width]);
+
+            // 渲染页面内容
+            renderProfile();
+            
+            // 添加装饰元素
+            if (decorations.enabled) {
+                addDecorations();
+            }
+        });
+
+        // 渲染个人信息
+        function renderProfile() {
+            const container = document.getElementById('profile');
+            
+            // 渲染各个部分
+            sectionOrder.forEach(section => {
+                switch(section) {
+                    case 'header':
+                        renderHeader(container);
+                        break;
+                    case 'about':
+                        renderAbout(container);
+                        break;
+                    case 'skills':
+                        renderSkills(container);
+                        break;
+                    // ... 其他部分的渲染
+                }
+            });
+        }
+
+        // 添加装饰元素
+        function addDecorations() {
+            const decorationStyles = {
+                hearts: ['💕', '💖', '💗', '💓'],
+                stars: ['⭐', '✨', '🌟'],
+                bubbles: ['🫧', '○', '◌'],
+                mixed: ['💕', '⭐', '🫧', '🎨']
+            };
+
+            const elements = decorationStyles[decorations.style];
+            const density = {
+                low: 10,
+                medium: 20,
+                high: 30
+            };
+
+            const container = document.querySelector('.container');
+            const count = density[decorations.density];
+
+            for (let i = 0; i < count; i++) {
+                const decoration = document.createElement('div');
+                decoration.className = 'decoration';
+                decoration.textContent = elements[Math.floor(Math.random() * elements.length)];
+                decoration.style.left = `${Math.random() * 100}%`;
+                decoration.style.top = `${Math.random() * 100}%`;
+                decoration.style.fontSize = `${Math.random() * 20 + 10}px`;
+                decoration.style.opacity = '0.5';
+                container.appendChild(decoration);
+            }
+        }
+
+        // 渲染头部信息
+        function renderHeader(container) {
+            const header = document.createElement('div');
+            header.className = 'card';
+            header.innerHTML = `
+                <div class="avatar-container">
+                    <img src="${profile.basic.avatar}" alt="${profile.basic.name}" class="avatar">
+                    <div class="avatar-decoration"></div>
+                </div>
+                <h1 class="name">${profile.basic.name}</h1>
+                <div class="title">${profile.basic.title}</div>
+                <div class="taglines">
+                    ${profile.taglines.map(tag => `<div class="tagline">${tag}</div>`).join('')}
+                </div>
+            `;
+            container.appendChild(header);
+        }
+
+        // 渲染关于我部分
+        function renderAbout(container) {
+            const about = document.createElement('div');
+            about.className = 'card about-section';
+            about.innerHTML = `
+                <h2>关于我</h2>
+                <div class="about-content">
+                    ${profile.about.map(text => `<p>${text}</p>`).join('')}
+                </div>
+                <div class="interests">
+                    ${profile.interests.map(interest => `<span class="tag">${interest}</span>`).join('')}
+                </div>
+            `;
+            container.appendChild(about);
+        }
+
+        // 渲染技能部分
+        function renderSkills(container) {
+            const skills = document.createElement('div');
+            skills.className = 'card skills-section';
+            skills.innerHTML = `
+                <h2>专业技能</h2>
+                <div class="skills-grid">
+                    ${profile.skills.map(skill => `
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-icon">${skill.icon}</span>
+                                <span class="skill-name">${skill.name}</span>
+                                <span class="skill-level">${skill.level}%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: ${skill.level}%; background: ${skill.color}"></div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            container.appendChild(skills);
+        }
+		
+		  // 渲染工作经验
+    function renderExperience(container) {
+        const experience = document.createElement('div');
+        experience.className = 'card experience-section';
+        experience.innerHTML = `
+            <h2>工作经历</h2>
+            <div class="timeline">
+                ${profile.experience.map(exp => `
+                    <div class="timeline-item">
+                        <div class="timeline-icon">${exp.icon}</div>
+                        <div class="timeline-content">
+                            <h3>${exp.company}</h3>
+                            <div class="timeline-position">${exp.position}</div>
+                            <div class="timeline-period">${exp.years}</div>
+                            <p>${exp.description}</p>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+        container.appendChild(experience);
+    }
+
+    // 渲染教育经历
+    function renderEducation(container) {
+        const education = document.createElement('div');
+        education.className = 'card education-section';
+        education.innerHTML = `
+            <h2>教育背景</h2>
+            <div class="timeline">
+                ${profile.education.map(edu => `
+                    <div class="timeline-item">
+                        <div class="timeline-icon">${edu.icon}</div>
+                        <div class="timeline-content">
+                            <h3>${edu.school}</h3>
+                            <div class="timeline-degree">${edu.degree}</div>
+                            <div class="timeline-period">${edu.years}</div>
+                            <p>${edu.details}</p>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+        container.appendChild(education);
+    }
+
+    // 渲染作品集
+    function renderPortfolio(container) {
+        const portfolio = document.createElement('div');
+        portfolio.className = 'card portfolio-section';
+        portfolio.innerHTML = `
+            <h2>作品展示</h2>
+            <div class="portfolio-grid">
+                ${profile.portfolio.map(item => `
+                    <div class="portfolio-item">
+                        <img src="${item.image}" alt="${item.title}" class="portfolio-image">
+                        <div class="portfolio-info">
+                            <h3 class="portfolio-title">${item.title}</h3>
+                            <p class="portfolio-desc">${item.description}</p>
+                            <div class="portfolio-tags">
+                                ${item.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+        container.appendChild(portfolio);
+    }
+
+    // 渲染成就
+    function renderAchievements(container) {
+        const achievements = document.createElement('div');
+        achievements.className = 'card achievements-section';
+        achievements.innerHTML = `
+            <h2>获奖成就</h2>
+            <div class="achievements-grid">
+                ${profile.achievements.map(achievement => `
+                    <div class="achievement-item">
+                        <div class="achievement-icon">${achievement.icon}</div>
+                        <div class="achievement-info">
+                            <h3>${achievement.title}</h3>
+                            <div class="achievement-year">${achievement.year}</div>
+                            <p>${achievement.description}</p>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+        container.appendChild(achievements);
+    }
+
+    // 渲染自定义部分
+    function renderCustom(container) {
+        Object.entries(profile.custom).forEach(([key, section]) => {
+            const customSection = document.createElement('div');
+            customSection.className = `card custom-section ${section.style}-style`;
+            customSection.innerHTML = `
+                <h2>${section.title}</h2>
+                <div class="custom-content">
+                    ${Array.isArray(section.content) 
+                        ? section.content.map(item => `<div class="custom-item">${item}</div>`).join('')
+                        : `<div class="custom-item">${section.content}</div>`
+                    }
+                </div>
+            `;
+            container.appendChild(customSection);
+        });
+    }
+
+    // 渲染联系方式
+    function renderContact(container) {
+        const contact = document.createElement('div');
+        contact.className = 'card contact-section';
+        contact.innerHTML = `
+            <h2>联系方式</h2>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <span class="contact-icon">📍</span>
+                    <span class="contact-text">${profile.basic.location}</span>
+                </div>
+                <div class="contact-item">
+                    <span class="contact-icon">📧</span>
+                    <span class="contact-text">${profile.basic.email}</span>
+                </div>
+            </div>
+            <div class="social-links">
+                ${profile.social.map(social => `
+                    <a href="${social.url}" class="social-link" style="color: ${social.color}" target="_blank" rel="noopener noreferrer">
+                        <i class="icon-${social.icon}"></i>
+                    </a>
+                `).join('')}
+            </div>
+        `;
+        container.appendChild(contact);
+    }
+
+    // 更新渲染函数
+    function renderProfile() {
+        const container = document.getElementById('profile');
+        // 显示加载动画
+        showLoading();
+        
+        try {
+            sectionOrder.forEach(section => {
+                switch(section) {
+                    case 'header':
+                        renderHeader(container);
+                        break;
+                    case 'about':
+                        renderAbout(container);
+                        break;
+                    case 'skills':
+                        renderSkills(container);
+                        break;
+                    case 'experience':
+                        renderExperience(container);
+                        break;
+                    case 'education':
+                        renderEducation(container);
+                        break;
+                    case 'portfolio':
+                        renderPortfolio(container);
+                        break;
+                    case 'achievements':
+                        renderAchievements(container);
+                        break;
+                    case 'custom':
+                        renderCustom(container);
+                        break;
+                    case 'contact':
+                        renderContact(container);
+                        break;
+                }
+            });
+        } catch (error) {
+            console.error('Error rendering profile:', error);
+            container.innerHTML = `
+                <div class="error-message">
+                    抱歉，加载个人信息时出现错误。请刷新页面重试。
+                </div>
+            `;
+        } finally {
+            // 隐藏加载动画
+            hideLoading();
+        }
+    }
+
+    // 加载动画控制
+    function showLoading() {
+        const loading = document.createElement('div');
+        loading.className = 'loading';
+        document.body.appendChild(loading);
+    }
+
+    function hideLoading() {
+        const loading = document.querySelector('.loading');
+        if (loading) {
+            loading.remove();
+        }
+    }
+    </script>
+</head>
+<body>
+    <div class="container" id="profile">
+        <!-- 内容将通过JavaScript动态渲染 -->
+    </div>
+</body>
+</html>
